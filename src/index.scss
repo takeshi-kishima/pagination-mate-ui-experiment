@@ -1,3 +1,11 @@
+// :root はCSS の擬似クラスで、文書を表すツリーのルート要素を選択します。 
+// HTML では :root は <html> 要素を表し、
+// 詳細度が高いことを除けば html セレクターと同等です。
+:root {
+  --z-index-header: 100;
+  --z-index-modal: 200;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -10,10 +18,6 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
-}
-:root {
-  --z-index-header: 100;
-  --z-index-modal: 200;
 }
 
 #root {
