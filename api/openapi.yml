@@ -1,0 +1,29 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Dog API
+  description: 犬
+servers:
+  - url: https://dog.ceo/api/breeds/image
+    description: "Dog API"
+paths:
+  /random:
+    get:
+      description: |
+        ランダムに犬の写真がくる
+      responses:
+        "200":
+          description: pet response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/result"
+components:
+  schemas:
+    result:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          type: string
