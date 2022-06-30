@@ -7,41 +7,58 @@ import {
   ImageListItem,
   ImageListItemBar,
   IconButton,
+  Skeleton,
 } from "@mui/material";
 import ChildCareTwoToneIcon from "@mui/icons-material/ChildCareTwoTone";
 import { DefaultService } from "../../generated/services/DefaultService";
 
-const pageNum: number = 10;
+const numInOnePage: number = 10;
 
 type item = {
-  img: string;
-  title: string;
-  author: string;
+  img?: string;
+  title?: string;
+  author?: string;
+  mireru: boolean;
   rows?: number;
   cols?: number;
-  featured?: boolean;
 };
+const items = [...Array(numInOnePage)].map(() => {
+  return { mireru: false };
+});
 
 function App() {
   const [page, setPage] = useState(1);
-  const [itemData, setItemData] = useState<item[]>([]);
+  const [itemData, setItemData] = useState<item[]>(items);
 
   useEffect(() => {
     console.log("かわったかね", page);
-    setItemData([]);
+    setItemData(items);
 
-    for (let index: number = 0; index < pageNum; index++) {
+    [...Array(numInOnePage)].forEach((_, index) => {
       DefaultService.getRandom().then((dog) => {
-        setItemData((pre) => [
-          ...pre,
-          {
-            img: dog.message!,
-            title: `タイトルその${index + 1}`,
-            author: `@xxxx${index + 1}wwww`,
-          },
-        ]);
+        // setItemData((pre) => [
+        //   ...pre,
+        //   {
+        //     img: dog.message!,
+        //     title: `タイトルその${index + 1}`,
+        //     author: `@xxxx${index + 1}wwww`,
+        //     loading: true,
+        //   },
+        // ]);
+        setItemData((pre) =>
+          pre.map((item, inindex) =>
+            index === inindex
+              ? {
+                  img: dog.message!,
+                  title: `タイトルその${index + 1}`,
+                  author: `@xxxx${index + 1}wwww`,
+                  mireru: true,
+                }
+              : item
+          )
+        );
       });
-    }
+    });
   }, [page]);
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -59,33 +76,40 @@ function App() {
           cols={2}
           gap={9}
         >
-          {itemData.map((item) => (
-            <ImageListItem key={item.img} onClick={() => console.log(item.img)}>
-              <img
-                src={item.img}
-                srcSet={`${item.img} 2x`}
-                alt={item.title}
-                loading="lazy"
-              />
-              <ImageListItemBar
-                title={item.title}
-                subtitle={item.author}
-                actionIcon={
-                  <IconButton
-                    sx={{ color: "rgba(255, 255, 255, 0.54)" }}
-                    aria-label={`info about ${item.title}`}
-                  >
-                    <ChildCareTwoToneIcon />
-                  </IconButton>
-                }
-              />
-            </ImageListItem>
-          ))}
+          {itemData.map((item) =>
+            item.mireru ? (
+              <ImageListItem
+                key={item.img}
+                onClick={() => console.log(item.img)}
+              >
+                <img
+                  src={item.img}
+                  srcSet={`${item.img} 2x`}
+                  alt={item.title}
+                  loading="lazy"
+                />
+                <ImageListItemBar
+                  title={item.title}
+                  subtitle={item.author}
+                  actionIcon={
+                    <IconButton
+                      sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+                      aria-label={`info about ${item.title}`}
+                    >
+                      <ChildCareTwoToneIcon />
+                    </IconButton>
+                  }
+                />
+              </ImageListItem>
+            ) : (
+              <Skeleton variant="rectangular" animation="wave" height={118} />
+            )
+          )}
         </ImageList>
       </div>
       <div>
         <Pagination
-          count={pageNum}
+          count={10}
           page={page}
           variant="outlined"
           color="primary"
