@@ -15,6 +15,7 @@ import { DefaultService } from "../../generated/services/DefaultService";
 const numInOnePage: number = 10;
 
 type item = {
+  id: number;
   img?: string;
   title?: string;
   author?: string;
@@ -22,8 +23,8 @@ type item = {
   rows?: number;
   cols?: number;
 };
-const items = [...Array(numInOnePage)].map(() => {
-  return { mireru: false };
+const items = [...Array(numInOnePage)].map((_, index) => {
+  return { id: index, mireru: false };
 });
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
           pre.map((item, inindex) =>
             index === inindex
               ? {
+                  id: inindex,
                   img: dog.message!,
                   title: `タイトルその${index + 1}`,
                   author: `@xxxx${index + 1}wwww`,
@@ -74,12 +76,12 @@ function App() {
           sx={{ width: "40vw", height: "75vh" }}
           variant="woven"
           cols={2}
-          gap={9}
+          gap={8}
         >
           {itemData.map((item) =>
             item.mireru ? (
               <ImageListItem
-                key={item.img}
+                key={item.id}
                 onClick={() => console.log(item.img)}
               >
                 <img
@@ -102,7 +104,9 @@ function App() {
                 />
               </ImageListItem>
             ) : (
-              <Skeleton variant="rectangular" animation="wave" height={118} />
+              <ImageListItem key={item.id}>
+                <Skeleton variant="rectangular" animation="wave" height={118} />
+              </ImageListItem>
             )
           )}
         </ImageList>
