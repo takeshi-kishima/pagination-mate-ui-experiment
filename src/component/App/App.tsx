@@ -23,17 +23,17 @@ type item = {
   rows?: number;
   cols?: number;
 };
-const items = [...Array(numInOnePage)].map((_, index) => {
+const initialItems = [...Array(numInOnePage)].map((_, index) => {
   return { id: index, mireru: false };
 });
 
 function App() {
   const [page, setPage] = useState(1);
-  const [itemData, setItemData] = useState<item[]>(items);
+  const [itemData, setItemData] = useState<item[]>(initialItems);
 
   useEffect(() => {
     console.log("かわったかね", page);
-    setItemData(items);
+    setItemData(initialItems);
 
     [...Array(numInOnePage)].forEach((_, index) => {
       DefaultService.getRandom().then((dog) => {
